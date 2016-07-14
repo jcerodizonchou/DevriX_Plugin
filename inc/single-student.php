@@ -1,26 +1,33 @@
 <?php
 /**
- * The template for displaying all single posts and attachments.
+ * The template for displaying all single posts and attachments
  *
-**/
+ * @package WordPress
+ * @subpackage Twenty_Sixteen
+ * @since Twenty Sixteen 1.0
+ */
+
 get_header(); ?>
 
-<?php
+<div id="primary" class="content-area">
+	<main id="main" class="site-main" role="main">
+		<?php if ( have_posts() ) : ?>
+		    <?php while ( have_posts() ) : the_post(); ?>
 
-$args = array( 'post_type' => 'student', 'posts_per_page' => 10 );
+		        <h1>Student Profile - inc/single</h1>
 
-$loop = new WP_Query( $args );
-while ( $loop->have_posts() ) : $loop->the_post();
-    echo "h1>";
-    the_title();
-    echo "</h1>";
-    echo "<br />";
-    echo '<div class="entry-content">';
-    the_content();
-    echo '</div>';
-endwhile;
+		        <p>Name: <span><?php the_title(); ?></span></p>
+		        <p>Name: <span><?php the_title(); ?></span></p>
 
-?>
+
+
+		    <?php endwhile; ?>
+		<?php endif; ?>
+	</main><!-- .site-main -->
+
+	<?php get_sidebar( 'content-bottom' ); ?>
+
+</div><!-- .content-area -->
 
 <?php get_sidebar(); ?>
 

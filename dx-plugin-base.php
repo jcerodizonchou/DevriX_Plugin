@@ -365,6 +365,7 @@ class DX_Plugin_Base {
 			'show_ui' => true,
 			'show_in_menu' => true,
 			'menu_position' => 40, // probably have to change, many plugins use this
+			'menu_icon' => 'dashicons-universal-access-alt',
 			'supports' => array(
 				'title',
 				'editor',
