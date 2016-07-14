@@ -13,11 +13,29 @@ get_header(); ?>
 	<main id="main" class="site-main" role="main">
 		<?php if ( have_posts() ) : ?>
 		    <?php while ( have_posts() ) : the_post(); ?>
+				
 
-		        <h1>Student Profile - inc/single</h1>
+		        <h1>Student Profile</h1>
 
 		        <p>Name: <span><?php the_title(); ?></span></p>
-		        <p>Name: <span><?php the_title(); ?></span></p>
+
+		        <?php
+
+				$student_address = get_post_meta($post->ID, 'student_address', true);
+
+				if($student_address) {
+
+				echo 'Student Address:' . $student_address;
+
+				}
+
+				?>
+		        
+		        <p>Message: <span><?php the_content(); ?></span></p>
+		        <p>
+		        	Student ID: <?php echo get_post_meta($post->ID, 'student_id', true); ?>
+		        </p>
+
 
 
 
