@@ -6,7 +6,7 @@
 get_header(); ?>
 
 <div id="primary" class="content-area">
-	<main id="main" class="site-main" role="main">
+    <main id="main" class="site-main" role="main">
     <h1>Single Page</h1>
     
         <?php
@@ -16,9 +16,7 @@ get_header(); ?>
 
         <?php 
 
-        while ( have_posts() ) : the_post(); get_template_part( 'student', 'single' ); 
-
-        ?>
+        while ( $loop -> have_posts() ) :  ?>
 
         <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
             <div class="container">
@@ -36,7 +34,7 @@ get_header(); ?>
                 <strong>Address: </strong>
                 <?php echo esc_html( get_post_meta( get_the_ID(), 'student_address', true ) ); ?>
                 <br />
-				<p>Summary: <?php the_content(); ?></p>
+                <p>Summary: <?php the_content(); ?></p>
             </div>
         </article>
  

@@ -86,15 +86,14 @@ class DX_Plugin_Base {
 		add_action( 'admin_init', array( $this, 'dx_register_settings' ), 5 );
 		
 		// Add a sample shortcode
-		add_action( 'init', array( $this, 'dx_sample_shortcode' ) );
+		add_action( 'init', array( $this, 'dx_student_shortcode' ) );
 		
 		// Add a sample widget
-		add_action( 'widgets_init', array( $this, 'dx_sample_widget' ) );
-
-		// Add Student API
+		add_action( 'widgets_init', array( $this, 'dx_student_widget' ) );
+		add_action( 'widgets_init', array( $this, 'jerome_widget' ) );
 		
 		// Page Template
-		add_action( 'template_include', array( $this, 'load_post_type_templates') );
+		add_action( 'template_include', array( $this, 'load_post_type_templates'), 1 );
 		/*
 		 * TODO:
 		 * 		template_redirect
@@ -420,20 +419,20 @@ class DX_Plugin_Base {
 
 
 	/***************************   CUSTOM PAGE TEMPLATE  *************************************/
-
+	
 	public function load_post_type_templates( $original_template ) {
 
      if ( get_query_var( 'post_type' ) == 'student' ) {
 
           if ( is_archive() || is_search() ) {
 
-		           if ( file_exists( get_stylesheet_directory(). '/archive-student.php' ) ) {
+		           if ( file_exists( get_stylesheet_directory(). '/archive.php' ) ) {
 
-		                 return get_stylesheet_directory() . '/archive-student.php';
+		                 return get_stylesheet_directory() . '/archive.php';
 
 		           } else {
 
-		                  return plugin_dir_path( __FILE__ ) . 'inc/archive-student.php';
+		                  return plugin_dir_path( __FILE__ ) . 'inc/archive.php';
 
 		           }
 
@@ -476,8 +475,8 @@ class DX_Plugin_Base {
 	 * First parameter is the shortcode name, would be used like: [dxsampcode]
 	 * 
 	 */
-	public function dx_sample_shortcode() {
-		add_shortcode( 'dxsampcode', array( $this, 'dx_sample_shortcode_body' ) );
+	public function dx_student_shortcode() {
+		add_shortcode( 'studentcode', array( $this, 'dx_student_shortcode_body' ) );
 	}
 	
 	/**
@@ -485,9 +484,39 @@ class DX_Plugin_Base {
 	 * @param array $attr arguments passed to array, like [dxsamcode attr1="one" attr2="two"]
 	 * @param string $content optional, could be used for a content to be wrapped, such as [dxsamcode]somecontnet[/dxsamcode]
 	 */
-	public function dx_sample_shortcode_body( $attr, $content = null ) {
+	public function dx_student_shortcode_body( $attr, $content = null ) {
+
+			$studentpost = array( 
+				'post_type' => 'student', 
+				'post_status' => 'publish'
+			);
+
+			$loop = new WP_Query( $studentpost );
+
+			while ( $loop->have_posts() ) : $loop->the_post(); ?>
+
+		            <div class="container">
+		                <strong>Name: </strong><?php the_title(); ?><br />
+		                <strong>ID: </strong>
+		                <?php echo esc_html( get_post_meta( get_the_ID(), 'student_id', true ) ); ?>
+		                <br />
+		                <strong>Section: </strong>
+		                <?php echo esc_html( get_post_meta( get_the_ID(), 'student_section', true ) ); ?>
+		                <br />
+		                <strong>Year: </strong>
+		                <?php echo esc_html( get_post_meta( get_the_ID(), 'student_year', true ) ); ?>
+		                <br />
+		                <strong>Address: </strong>
+		                <?php echo esc_html( get_post_meta( get_the_ID(), 'student_address', true ) ); ?>
+		                <br />
+						<p>Summary: <?php the_content(); ?></p>
+		            </div>
+
+			<?php endwhile; 
+
 		/*
 		 * Manage the attributes and the content as per your request and return the result
+		       shortcode -> [studentcode]
 		 */
 		return __( 'Sample Output', 'dxbase');
 	}
@@ -495,10 +524,12 @@ class DX_Plugin_Base {
 	/**
 	 * Hook for including a sample widget with options
 	 */
-	public function dx_sample_widget() {
-		include_once DXP_PATH_INCLUDES . '/dx-sample-widget.class.php';
+	public function dx_student_widget() {
+		include_once DXP_PATH_INCLUDES . '/dx-student-widget.class.php';
 	}
-	
+	public function jerome_widget() {
+		include_once DXP_PATH_INCLUDES . '/jerome-widget.class.php';
+	}
 	/**
 	 * Add textdomain for plugin
 	 */
